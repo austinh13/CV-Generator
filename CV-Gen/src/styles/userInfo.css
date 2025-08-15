@@ -1,0 +1,132 @@
+.leftSide{
+    width: 36vw;
+    height: 96vh;
+
+    background-color: lightblue;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:2vh;
+    padding: 2vh 2vw 2vh 2vw;
+}
+
+.save{
+    padding: 1vh 1vw 1vh 1vw;
+    width: 23vw;
+    height: 10vh;
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: 2px;
+
+    background-color: rgb(151, 191, 204);
+    display: flex;
+    flex-direction: row;
+}
+
+.save p{
+    font-size: 1.5vw;
+}
+
+.tab{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.personalInfo {
+    margin-top: -1vh;
+    width: 20vw;
+    height: 36vh;
+    padding: 0.5vh 1vw 1vh 1vw;
+    background-color: rgb(151, 191, 204);
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2); 
+}
+
+.personalInfo h1{
+    font-size: 1.5vw;
+}
+
+.formGeneral{
+    display: flex;
+    flex-direction: column;
+    align-items: first baseline;
+    width: 18vw;
+
+    gap:0.8vh;
+}
+
+.formGeneral p{
+    font-size: 1vw;
+    margin: 0;
+}
+
+.formGeneral input{
+    height: 2vh;
+    width: 12vw;
+}
+
+#generalSubmit{
+    align-self: flex-end;
+}
+
+#educationButton{
+    width: 22vw;
+    height: 10vh;
+    padding: 0.5vh 1vw 1vh 1vw;
+
+    background-color: rgb(151, 191, 204);
+    background-color: rgb(151, 191, 204);
+    border-radius: 5px;
+    border-width: 0;
+    border-style: solid;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2); 
+    z-index: 1;
+
+    font-size: 1.5vw;
+}
+
+.educationContent{
+    position: absolute;
+    margin-top: -0.4vh;
+    height: 18vh;
+    display: flex;
+    flex-direction: column;
+    align-items: first baseline;
+    width: 20vw;
+    background-color: rgb(151, 191, 204);
+    padding: 0.5vh 1vw 2vh 1vw;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2); 
+
+    gap:1vh;
+    z-index: 2;
+    border-radius: 5px;
+}
+
+.educationContent p{
+    margin: 0;
+}
+.educationContent.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.educationContent.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.dates{
+    font-size: 1vw;
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.dates input{
+    width: 5vw;
+}
