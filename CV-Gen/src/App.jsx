@@ -1,32 +1,31 @@
+
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import General from './components/General'
 import Education from './components/Education'
 import CV from './components/CV'
 
+
 function App() {
-  const [count, setCount] = useState(0);
+
   const [generalData, setGeneralData] = useState({
       name: "",
       email: "",
       number: "",
       location: ""
     });
-  const [educationData, setEducationData] = useState({
-    degree: "",
-    school: "",
-    sDate: "",
-    eDate: ""
-  })
+
+  // An array of educations
+  const [educationData, setEducationData] = useState([]);
+
 
   const handleGeneralChange = (field, value) => {
     setGeneralData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleEducation = (field,value) => {
-    setEducationData(prev => ({...prev,[field]: value}))
-  }
+  const addEducation = (newEducation) => {
+    setEducationData(prev => [...prev, newEducation]);
+  };
+
 
   return (
     <>
@@ -35,12 +34,14 @@ function App() {
         <p>Download Resume!</p>
         <button>Download</button>
       </div>
-      <General formData={generalData} handleGeneralChange={handleGeneralChange}></General>
-      <Education formData={educationData} handleEducation={handleEducation}></Education>
-    </div>
-    <div className = "rightSide">
-      <CV></CV>
-    </div>
+       <General formData={generalData} handleGeneralChange={handleGeneralChange} />
+
+        <Education addEducation={addEducation} />
+      </div>
+
+      <div className="rightSide">
+        <CV generalData={generalData} educationData={educationData} />
+      </div>
     </>
     
   );

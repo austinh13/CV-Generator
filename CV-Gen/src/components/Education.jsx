@@ -1,12 +1,29 @@
+
 import { useState } from "react";
 
-export default function Education({formData,handleEducation}){
-      const [isOpen, setIsOpen] = useState(false);
+export default function Education({ addEducation }){
+    const [isOpen, setIsOpen] = useState(false);
+
+    const [form, setForm] = useState({
+        degree: "",
+        school: "",
+        city: "",
+        sDate: "",
+        eDate: "",
+        gpa: ""
+    });
+
+    const handleChange = (field, value) => {
+        setForm(prev => ({ ...prev, [field]: value }));
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData)
-    }
+        addEducation(form);
+        setForm({ degree: "", school: "",city: "", sDate: "", eDate: "", gpa: "" }); // reset
+    };
+
     return(
         <div className = "educationInfo">
             <button id = "educationButton" 
@@ -18,15 +35,33 @@ export default function Education({formData,handleEducation}){
                 <form className="formGeneral" onSubmit={handleSubmit}>
                     <p>Degree</p>
                     <input
-                        type = "text"
-                        onChange={(e) => handleEducation("degree",e.target.value)}
+                        type="text"
+                        value={form.degree}
+                        onChange={(e) => handleChange("degree", e.target.value)}
                         required
                     >
                     </input>
                     <p>School</p>
                     <input
                         type = "text"
-                        onChange={(e) => handleEducation("school",e.target.value)}
+                        value={form.school}
+                        onChange={(e) => handleChange("school",e.target.value)}
+                        required
+                    >
+                    </input>
+                    <p>City, State</p>
+                    <input
+                        type = "text"
+                        value={form.city}
+                        onChange={(e) => handleChange("city",e.target.value)}
+                        required
+                    >
+                    </input>
+                    <p>GPA</p>
+                    <input
+                        type = "text"
+                        value={form.gpa}
+                        onChange={(e) => handleChange("gpa",e.target.value)}
                         required
                     >
                     </input>
@@ -34,18 +69,19 @@ export default function Education({formData,handleEducation}){
                         Start 
                         <input
                         type = "date"
-                        onChange={(e) => handleEducation("sDate",e.target.value)}
+                        value={form.sDate}
+                        onChange={(e) => handleChange("sDate",e.target.value)}
                         required
                         ></input>
                         End
                         <input
                         type = "date"
-                        onChange={(e) => handleEducation("eDate",e.target.value)}
+                        value={form.eDate}
+                        onChange={(e) => handleChange("eDate",e.target.value)}
                         required
                         ></input>
                     </div>
-                    <button
-                    type="submit">
+                    <button type="submit" id = "generalSubmit">
                     Submit
                     </button>
                 </form>
@@ -54,3 +90,67 @@ export default function Education({formData,handleEducation}){
         </div>
     )
 }
+
+/*
+import { useState } from 'react';
+
+export default function Education({ addEducation }) {
+  const [form, setForm] = useState({
+    degree: "",
+    school: "",
+    sDate: "",
+    eDate: ""
+  });
+
+  const handleChange = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addEducation(form);
+    setForm({ degree: "", school: "", sDate: "", eDate: "" }); // reset
+  };
+
+  return (
+    <div className="educationForm">
+      <h1>Education</h1>
+      <form onSubmit={handleSubmit}>
+        <p>Degree</p>
+        <input
+          type="text"
+          value={form.degree}
+          onChange={(e) => handleChange("degree", e.target.value)}
+          required
+        />
+
+        <p>School</p>
+        <input
+          type="text"
+          value={form.school}
+          onChange={(e) => handleChange("school", e.target.value)}
+          required
+        />
+
+        <p>Start Date</p>
+        <input
+          type="text"
+          value={form.sDate}
+          onChange={(e) => handleChange("sDate", e.target.value)}
+          required
+        />
+
+        <p>End Date</p>
+        <input
+          type="text"
+          value={form.eDate}
+          onChange={(e) => handleChange("eDate", e.target.value)}
+          required
+        />
+
+        <button type="submit">Add Education</button>
+      </form>
+    </div>
+  );
+}
+*/

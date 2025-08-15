@@ -1,7 +1,15 @@
 export default function GeneralCV(){
     return(
-        <div class = "personalSection">
+        <div className = "personalSection">
             <h1 id="personalHeader"></h1>
+            <div className="bio">
+                <p id = "email"></p>
+                <p>|</p>
+                <p id = "phone"></p>
+                <p>|</p>
+                <p id = "location"></p>
+            </div>
+            <div class = "bar"></div>
         </div>
     )
 }
@@ -9,4 +17,13 @@ export default function GeneralCV(){
 export function setGeneral(formData){
     const pHeader = document.getElementById("personalHeader");
     pHeader.innerHTML = formData.name;
+
+    const email = document.getElementById("email")
+    email.innerHTML = formData.email;
+
+    const phone = document.getElementById("phone")
+    phone.innerHTML = formData.number
+
+    const location = document.getElementById("location")
+    location.innerHTML = formData.location
 }
