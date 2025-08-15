@@ -47,6 +47,10 @@
     align-items: flex-start;
 }
 
+.educationTab{
+    display: flex;
+    flex-direction: row;
+}
 .educationItem{
     display: flex;
     flex-direction: column;
@@ -60,4 +64,8 @@
 
 .educationItem p{
     margin: 0;
+}
+#className{
+    width: 5vw;
+    height: 3vh;
 }
