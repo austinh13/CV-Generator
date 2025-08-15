@@ -1,0 +1,14 @@
+
+
+.ResumeHolder{
+    display: flex;
+    flex-direction: column;
+
+    width: 35vw;
+    height: 90vh;
+    background-color: rgb(255, 227, 191);
+}
+
+.personalSection{
+
+}

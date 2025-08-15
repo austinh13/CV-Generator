@@ -1,5 +1,8 @@
 #root{
     background-color: antiquewhite;
+
+    display: flex;
+    flex-direction: row;
 }
 
 html, body, #root {
@@ -7,3 +10,4 @@ html, body, #root {
   padding: 0;
   height: 100%;
 }
+

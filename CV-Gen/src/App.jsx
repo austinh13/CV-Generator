@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
-import Dropdown from './components/Dropdown'
 import General from './components/General'
 import Education from './components/Education'
+import CV from './components/CV'
+
 function App() {
   const [count, setCount] = useState(0);
   const [generalData, setGeneralData] = useState({
@@ -38,7 +39,7 @@ function App() {
       <Education formData={educationData} handleEducation={handleEducation}></Education>
     </div>
     <div className = "rightSide">
-
+      <CV></CV>
     </div>
     </>
     

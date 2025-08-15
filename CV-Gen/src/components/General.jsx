@@ -1,10 +1,10 @@
 import { use, useState } from "react"
-
+import {setGeneral} from "./GeneralCV"
 export default function General({ formData, handleGeneralChange }){
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log({formData})
+        setGeneral(formData);
     }
     return(
         <div className = "personalInfo">
