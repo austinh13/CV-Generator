@@ -50,6 +50,8 @@
 .educationTab{
     display: flex;
     flex-direction: row;
+    gap:8vw;
+    align-items: center;
 }
 .educationItem{
     display: flex;
@@ -65,7 +67,10 @@
 .educationItem p{
     margin: 0;
 }
-#className{
+
+.deleteEducation{
     width: 5vw;
     height: 3vh;
+    background-color: rgb(255, 94, 94);
+    border-style: solid;
 }

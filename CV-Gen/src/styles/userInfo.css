@@ -1,7 +1,8 @@
 .leftSide{
     width: 36vw;
-    height: 96vh;
-
+      height: auto;      /* don’t lock to 100vh */
+    min-height: 96%; 
+    overflow-y: auto;  /* allow vertical scroll */
     background-color: lightblue;
 
     display: flex;
@@ -19,6 +20,9 @@
     padding: 4vh 0 4vh 0;
 
     align-items: center;
+    height: auto;      /* don’t lock to 100vh */
+    min-height: 92%; 
+    overflow-y: auto;  /* allow vertical scroll */
 }
 
 .save{
@@ -33,10 +37,17 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap:1.5vw;
 }
 
 .save p{
     font-size: 1.5vw;
+}
+
+#saveButton{
+    width: 8vw;
+    height: 4vh;
+    font-size: 1vw;
 }
 
 .tab{
@@ -48,9 +59,9 @@
 
 
 .personalInfo {
-    margin-top: -1vh;
+    flex-shrink: 0;
     width: 20vw;
-    height: 36vh;
+    height: 38vh;
     padding: 0.5vh 1vw 1vh 1vw;
     background-color: rgb(151, 191, 204);
     overflow-y: auto;
@@ -79,13 +90,15 @@
 .formGeneral input{
     font-family: sans-serif;
     height: 2vh;
-    width: 12vw;
+    width: 15vw;
 }
 
 #generalSubmit{
     align-self: flex-end;
+    margin-top: 1vh;
 }
 
+/* Education forms */
 #educationButton{
     width: 22vw;
     height: 10vh;
@@ -103,8 +116,7 @@
 }
 
 .educationContent{
-    position: absolute;
-    margin-top: -0.4vh;
+   
     height: 33vh;
     display: flex;
     flex-direction: column;
@@ -122,14 +134,12 @@
 .educationContent p{
     margin: 0;
 }
-.educationContent.show {
-  opacity: 1;
-  visibility: visible;
-}
 
 .educationContent.hide {
-  opacity: 0;
-  visibility: hidden;
+  display: none;
+}
+.educationContent.show {
+  display: block;
 }
 
 .dates{
@@ -142,3 +152,5 @@
 .dates input{
     width: 5vw;
 }
+
+/* Education Form */
