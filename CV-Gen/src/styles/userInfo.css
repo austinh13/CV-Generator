@@ -153,4 +153,26 @@
     width: 5vw;
 }
 
-/* Education Form */
+/* Experienece Form */
+
+.expContent{
+    height: 36vh;
+    display: flex;
+    flex-direction: column;
+    align-items: first baseline;
+    width: 20vw;
+    background-color: rgb(151, 191, 204);
+    padding: 0.5vh 1vw 2vh 1vw;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2); 
+
+    gap:1vh;
+    z-index: 2;
+    border-radius: 5px;
+}
+
+.expContent.hide {
+  display: none;
+}
+.expContent.show {
+  display: block;
+}

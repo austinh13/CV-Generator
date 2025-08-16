@@ -69,8 +69,52 @@
 }
 
 .deleteEducation{
-    width: 5vw;
+    width: 4vw;
     height: 3vh;
     background-color: rgb(255, 94, 94);
     border-style: solid;
+}
+
+/* Experience */
+
+.experienceSection{
+    display: flex;
+    flex-direction: column;
+        width: 35vw;
+    height: 30vh;
+    align-items: flex-start;
+    gap:1vh;
+}
+
+.experienceSection h2{
+    text-align: center;
+        width: 100%;
+
+}
+
+.experienceTab{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:1vw;
+}
+
+.experienceUnit{
+    display: flex;
+    flex-direction: column;
+    gap:0.5vh;
+    width: 30vw;
+}
+.experienceTab h4{
+    margin: 0;
+}
+
+.experienceTab p{
+    margin: 0;
+}
+
+#jobDescrip{
+    height: 5vh;
+    width: 15vw;
+    resize: vertical;
 }

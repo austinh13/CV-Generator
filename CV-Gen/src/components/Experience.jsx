@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-export default function Experience({ addEducation }){
+export default function Experience({ addExp }){
     const [isOpen, setIsOpen] = useState(false);
 
     const [form, setForm] = useState({
@@ -20,8 +20,8 @@ export default function Experience({ addEducation }){
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //addEducation(form);
-        setForm({ degree: "", school: "",city: "", sDate: "", eDate: "", gpa: "" }); // reset
+        addExp(form);
+        setForm({ company: "", job: "", address: "", sDate: "", eDate: "", descrip: "" })
     };
 
     return(
@@ -31,7 +31,7 @@ export default function Experience({ addEducation }){
             >
                 Experience
             </button>
-            <div className={`educationContent ${isOpen ? "show" : "hide"}`}>
+            <div className={`expContent ${isOpen ? "show" : "hide"}`}>
                 <form className="formGeneral" onSubmit={handleSubmit}>
                     <p>Company</p>
                     <input
@@ -58,13 +58,16 @@ export default function Experience({ addEducation }){
                     >
                     </input>
                     <p>Short Description</p>
-                    <input
-                        type = "text"
+                    <textarea
+                        id="jobDescrip"
+                        placeholder="Type: Suggested for suggested description (not all jobs guaranteed) OR type your own under 150 Characters"
+                        maxLength={150}
+                        rows={3}         // how tall it is
+                        cols={20}        // how wide it is
                         value={form.descrip}
-                        onChange={(e) => handleChange("descrip",e.target.value)}
+                        onChange={(e) => handleChange("descrip", e.target.value)}
                         required
-                    >
-                    </input>
+                    />
                     <div className = "dates">
                         Start 
                         <input

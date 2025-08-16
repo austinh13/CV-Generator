@@ -49,11 +49,11 @@ function App() {
       </div>
       <General formData={generalData} handleGeneralChange={handleGeneralChange} />
       <Education addEducation={addEducation} />
-      <Experience addExpereince={addExpereince}></Experience>
+      <Experience addExp={addExpereince}></Experience>
     </div>
 
       <div className="rightSide">
-        <CV generalData={generalData} educationData={educationData} setSections ={setEducationData} />
+        <CV generalData={generalData} educationData={educationData} experienceData={experienceData} setSections ={setEducationData} setExp ={setExperienceData} />
       </div>
     </>
     
