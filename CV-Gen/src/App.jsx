@@ -32,7 +32,7 @@ function App() {
 
 
       createBio(doc,generalData);
-
+      createEducations(doc,educationData);
 
       doc.save("resume.pdf");
   };
@@ -79,6 +79,25 @@ function createBio(doc,generalData){
       doc.setFontSize(14);
       doc.text(`${generalData.email}  |  ${generalData.number}  |  ${generalData.location}`, 45, 30);
 
-      doc.setLineWidth(0.5); // thin line
-      doc.line(10, 40, pdfWidth - 10, 40); // from left margin to right margin
+      doc.setLineWidth(0.5);
+      doc.line(10, 40, pdfWidth - 10, 40); 
+}
+
+function createEducations(doc,educationData){
+    let height = 60;
+    doc.setFontSize(18);
+    doc.text("Education",(pdfWidth/2) - 15,50);
+    educationData.forEach((section) =>{
+      doc.setFontSize(15);
+      doc.setFont("times","bold");
+      doc.text(`${section.school}, ${section.city}`,15,height);
+      height+=7;
+      doc.setFontSize(14);
+      doc.setFont("times","normal");
+      doc.text(`${section.degree},  ${section.sDate} to ${section.eDate}`,15,height);
+      height+=7;
+      doc.text(`GPA: ${section.gpa}`,15,height);
+      height+=9;
+    })
+    
 }

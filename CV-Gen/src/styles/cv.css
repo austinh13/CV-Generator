@@ -45,6 +45,9 @@
     width: 35vw;
     height: 30vh;
     align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap:1vh;
 }
 
 .educationTab{
@@ -58,6 +61,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5vh;
+    width: 23vw;
 }
 
 .educationItem h4{
