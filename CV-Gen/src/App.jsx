@@ -33,7 +33,7 @@ function App() {
 
       createBio(doc,generalData);
       createEducations(doc,educationData);
-
+      createJobs(doc,experienceData);
       doc.save("resume.pdf");
   };
 
@@ -73,31 +73,63 @@ function App() {
 export default App;
 
 function createBio(doc,generalData){
-      doc.setFontSize(25);
+      doc.setFontSize(23);
+      doc.setFont("times","bold");
       doc.text(`${generalData.name}`,90,20);
 
+      doc.setFont("times","normal");
       doc.setFontSize(14);
       doc.text(`${generalData.email}  |  ${generalData.number}  |  ${generalData.location}`, 45, 30);
 
-      doc.setLineWidth(0.5);
-      doc.line(10, 40, pdfWidth - 10, 40); 
+      doc.setLineWidth(0.3);
+      doc.line(10, 37, pdfWidth - 10, 37); 
 }
 
+let height = 55;
+
 function createEducations(doc,educationData){
-    let height = 60;
     doc.setFontSize(18);
-    doc.text("Education",(pdfWidth/2) - 15,50);
+    doc.text("Education",(pdfWidth/2) - 15,45);
     educationData.forEach((section) =>{
-      doc.setFontSize(15);
-      doc.setFont("times","bold");
-      doc.text(`${section.school}, ${section.city}`,15,height);
-      height+=7;
       doc.setFontSize(14);
-      doc.setFont("times","normal");
-      doc.text(`${section.degree},  ${section.sDate} to ${section.eDate}`,15,height);
+      doc.setFont("times","bold");
+      doc.text(`${section.school} - ${section.city}`,12,height);
       height+=7;
-      doc.text(`GPA: ${section.gpa}`,15,height);
+      doc.setFontSize(13);
+      doc.setFont("times","normal");
+      doc.text(`${section.degree},  ${section.sDate} to ${section.eDate}`,12,height);
+      height+=7;
+      doc.text(`GPA: ${section.gpa}`,12,height);
       height+=9;
     })
     
+    doc.setLineWidth(0.3);
+    doc.line(10, height-4, pdfWidth - 10, height-4); 
+    height+=5;
+}
+
+function createJobs(doc,experienceData){
+  doc.setFontSize(18)
+  doc.text("Experience",(pdfWidth/2)-15,height)
+  height+=9;
+  experienceData.forEach((section)=>{
+    doc.setFontSize(14);
+    doc.setFont("times","bold");
+    doc.text(`${section.job} at ${section.company} - ${section.address}`,12,height)
+    height+=7;
+    doc.setFont("times","normal");
+    doc.text(`${section.descrip}`,12,height, { maxWidth: 200 })
+    console.log(section.descrip.length);
+    if(section.descrip.length >= 180){
+      height+=18;
+    }
+    else if(section.descrip.length >= 100){
+      height += 13;
+    }
+    else{
+    height+=7;
+    }
+    doc.text(`From: ${section.sDate} to ${section.eDate}`,12,height)
+    height+=9;
+  })
 }

@@ -1,5 +1,32 @@
 
 import { useState } from "react";
+import jobs from '../jobs.json'; // Import jobs if not already
+
+async function rewriteDescription(description) {
+  const res = await fetch("http://localhost:3000/api/rewrite-description", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ description }),
+  });
+
+  let data = {};
+  try {
+    data = await res.json();
+  } catch (err) {
+    console.error("Failed to parse JSON:", err);
+  }
+
+  return data.rewritten || description;
+
+}
+
+export function findJob(title) {
+  const lowerTitle = title.toLowerCase();
+  return jobs.find(job => {
+    const jobTitle = job.title.toLowerCase();
+    return jobTitle.includes(lowerTitle) || jobTitle.includes(lowerTitle + "s");
+  });
+}
 
 export default function Experience({ addExp }){
     const [isOpen, setIsOpen] = useState(false);
@@ -18,10 +45,19 @@ export default function Experience({ addExp }){
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        addExp(form);
-        setForm({ company: "", job: "", address: "", sDate: "", eDate: "", descrip: "" })
+        let description = form.descrip;
+
+        if (form.descrip.toLowerCase() === "suggested") {
+            const jobMatch = findJob(form.job);
+            description = jobMatch?.description || "No description found!";
+        } else {
+            description = await rewriteDescription(form.descrip);
+        }
+
+        addExp({ ...form, descrip: description });
+        setForm({ company: "", job: "", address: "", sDate: "", eDate: "", descrip: "" });
     };
 
     return(
