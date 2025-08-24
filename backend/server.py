@@ -10,7 +10,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173",
-                   "https://cv-generator-two-gules.vercel.app/"
+                   "https://cv-generator-two-gules.vercel.app"
                    ])  # your frontend URL
 
 @app.route("/api/rewrite-description", methods=["POST"])
