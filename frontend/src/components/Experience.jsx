@@ -2,8 +2,11 @@
 import { useState } from "react";
 import jobs from '../jobs.json'; // Import jobs if not already
 
+// /api/rewrite-description
+
+// https://cv-generator-sz5i.onrender.com/api/rewrite-description
 async function rewriteDescription(description) {
-  const res = await fetch("http://localhost:3000/api/rewrite-description", {
+  const res = await fetch("https://cv-generator-sz5i.onrender.com/api/rewrite-description", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ description }),
