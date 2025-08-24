@@ -1,7 +1,7 @@
 // server.js or /api/rewrite-description.js
 import express from "express";
 import cors from "cors";
-import OpenAI from "openai";
+import OpenAI from "openai/index.js";
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173" }));
