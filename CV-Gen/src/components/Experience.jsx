@@ -31,6 +31,8 @@ export function findJob(title) {
 export default function Experience({ addExp }){
     const [isOpen, setIsOpen] = useState(false);
 
+    const [decision,setDecision] = useState(false);
+
     const [form, setForm] = useState({
         company: "",
         job: "",
@@ -52,8 +54,12 @@ export default function Experience({ addExp }){
         if (form.descrip.toLowerCase() === "suggested") {
             const jobMatch = findJob(form.job);
             description = jobMatch?.description || "No description found!";
-        } else {
+        } 
+        else if(decision){
             description = await rewriteDescription(form.descrip);
+        }
+        else {
+            description = form.descrip;
         }
 
         addExp({ ...form, descrip: description });
@@ -104,6 +110,14 @@ export default function Experience({ addExp }){
                         onChange={(e) => handleChange("descrip", e.target.value)}
                         required
                     />
+                    <p>Use AI to improve job description</p>
+                    <input
+                        id = "aiChecker"
+                        type="checkbox"
+                        checked={decision}
+                        onChange={() => setDecision(!decision)}
+                    >
+                    </input>
                     <div className = "dates">
                         Start 
                         <input

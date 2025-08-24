@@ -117,8 +117,124 @@
     margin: 0;
 }
 
-#jobDescrip{
-    height: 5vh;
-    width: 15vw;
-    resize: vertical;
+@media (max-width:600px){
+    .ResumeHolder{
+        font-family: sans-serif;
+
+        width: 98vw;
+        height: 90vh;
+        padding: 4vh 1vw 2vh 1vw;
+        background-color: rgb(255, 246, 234);
+    }
+
+    /*
+        General Information Section    
+    */
+    .personalSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 95vw;
+        height: 14vh;
+        gap: 0.5vh;
+    }
+
+    .personalSection h1{
+        margin: 0;
+    }
+    .bio{
+        display: flex;
+        flex-direction: row;
+        gap: 0.5vw;
+    }
+
+    .bio p {
+        font-size: 1.9vh;
+    }
+
+    .bar{
+        width: 95vw;
+        height: 0.2vh;
+        background-color: rgb(127, 127, 127);
+    }
+
+    .educationSection{
+        width: 95vw;
+        height: 30vh;
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap:1vh;
+    }
+
+    .educationTab{
+        display: flex;
+        flex-direction: row;
+        gap:8vw;
+        align-items: center;
+    }
+    .educationItem{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5vh;
+        width: 70vw;
+    }
+
+    .educationItem h4{
+        margin: 0;
+        font-size: 2vh;
+    }
+
+    .educationItem p{
+        margin: 0;
+        font-size: 1.8vh;
+    }
+
+    .deleteEducation{
+        width: 13.5vw;
+        height: 3vh;
+        background-color: rgb(255, 94, 94);
+        border-style: solid;
+    }
+
+    /* Experience */
+
+    .experienceSection{
+        width: 95vw;
+        height: 30vh;
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap:1vh;
+    }
+
+    .experienceSection h2{
+        text-align: center;
+        width: 100%;
+
+    }
+
+    .experienceTab{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap:7vw;
+    }
+
+    .experienceUnit{
+        display: flex;
+        flex-direction: column;
+        gap:0.5vh;
+        width: 75vw;
+    }
+    .experienceTab h4{
+        margin: 0;
+        font-size: 2vh;
+    }
+
+    .experienceTab p{
+        margin: 0;
+        font-size: 1.8vh;
+    }
 }
