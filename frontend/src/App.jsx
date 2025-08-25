@@ -56,6 +56,7 @@ function App() {
       <div className="save">
         <p>Download Resume!</p>
         <button id = "saveButton" onClick={(generatePDF)}>Download</button>
+        <a href = "https://austinh.vercel.app/" target = "_blank">Cold starts my take 1-2 minutes. Demo video under projects!</a>
       </div>
       <General formData={generalData} handleGeneralChange={handleGeneralChange} />
       <Education addEducation={addEducation} />
