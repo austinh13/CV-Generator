@@ -1,10 +1,6 @@
-import { useState, useEffect } from "react";
-import jobs from '../jobs.json';
-
-
+import { Briefcase, Trash } from "@phosphor-icons/react";
 
 export default function ExperienceCV({ sections, setExp }) {
-  const [rewrittenDescriptions, setRewrittenDescriptions] = useState({});
 
   const formatDateUS = (dateString) => {
     if (!dateString) return "";
@@ -12,43 +8,46 @@ export default function ExperienceCV({ sections, setExp }) {
     return `${month}/${day}/${year}`;
   };
 
-
   const handleDelete = (indexToDelete) => {
     setExp(prevSections =>
       prevSections.filter((_, index) => index !== indexToDelete)
     );
   };
 
-  // Rewrite descriptions on mount
-  useEffect(() => {
-    sections.forEach(async (sec, index) => {
-      if (sec.descrip.toLowerCase() !== "suggested") {
-        const rewritten = await rewriteDescription(sec.descrip);
-        setRewrittenDescriptions(prev => ({ ...prev, [index]: rewritten }));
-      }
-    });
-  }, [sections]);
-
   return (
-    <div className="experienceSection">
-      <h2>Experience</h2>
-      {sections.map((sec, index) => (
-        <div key={index} className="experienceTab">
-          <div className="experienceUnit">
-            <h4>{sec.job} at {sec.company}, {sec.address}</h4>
-            <p>
-              {sec.descrip}
-            </p>
-            <p>From: {formatDateUS(sec.sDate)} To: {formatDateUS(sec.eDate)}</p>
-          </div>
-          <button
-            className="deleteEducation"
-            onClick={() => handleDelete(index)}
-          >
-            Delete
-          </button>
+    <div className="resume-section">
+      <h2 className="resume-section-title">
+        <Briefcase size={18} weight="bold" />
+        Work Experience
+      </h2>
+
+      {sections.length === 0 ? (
+        <div className="resume-empty">
+          <Briefcase size={28} weight="light" />
+          <p>Add a role on the left and we'll lay it out here automatically.</p>
         </div>
-      ))}
+      ) : (
+        <div className="resume-list">
+          {sections.map((sec, index) => (
+            <div key={index} className="resume-item">
+              <div className="resume-item-main">
+                <p className="resume-item-title">{sec.job} · {sec.company}</p>
+                <p className="resume-item-sub">{sec.address}</p>
+                <p className="resume-item-desc">{sec.descrip}</p>
+                <p className="resume-item-meta">{formatDateUS(sec.sDate)} – {formatDateUS(sec.eDate)}</p>
+              </div>
+              <button
+                type="button"
+                className="resume-item-delete"
+                aria-label={`Remove ${sec.job} at ${sec.company}`}
+                onClick={() => handleDelete(index)}
+              >
+                <Trash size={15} weight="bold" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

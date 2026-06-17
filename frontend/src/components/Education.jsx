@@ -1,9 +1,6 @@
-
 import { useState } from "react";
 
-export default function Education({ addEducation }){
-    const [isOpen, setIsOpen] = useState(false);
-
+export default function Education({ addEducation }) {
     const [form, setForm] = useState({
         degree: "",
         school: "",
@@ -17,77 +14,89 @@ export default function Education({ addEducation }){
         setForm(prev => ({ ...prev, [field]: value }));
     };
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
         addEducation(form);
-        setForm({ degree: "", school: "",city: "", sDate: "", eDate: "", gpa: "" }); // reset
+        setForm({ degree: "", school: "", city: "", sDate: "", eDate: "", gpa: "" }); // reset
     };
 
-    return(
-        <div className = "educationInfo">
-            <button id = "educationButton" 
-            onClick={() => setIsOpen(!isOpen)}
-            >
-                Education
-            </button>
-            <div className={`educationContent ${isOpen ? "show" : "hide"}`}>
-                <form className="formGeneral" onSubmit={handleSubmit}>
-                    <p>Degree</p>
+    return (
+        <form className="form-grid" onSubmit={handleSubmit}>
+            <div className="field">
+                <label className="field-label" htmlFor="edu-school">School</label>
+                <input
+                    id="edu-school"
+                    type="text"
+                    placeholder="University of Texas"
+                    value={form.school}
+                    onChange={(e) => handleChange("school", e.target.value)}
+                    required
+                />
+            </div>
+
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="edu-degree">Degree</label>
                     <input
+                        id="edu-degree"
                         type="text"
+                        placeholder="B.S. Computer Science"
                         value={form.degree}
                         onChange={(e) => handleChange("degree", e.target.value)}
                         required
-                    >
-                    </input>
-                    <p>School</p>
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="edu-city">City, state</label>
                     <input
-                        type = "text"
-                        value={form.school}
-                        onChange={(e) => handleChange("school",e.target.value)}
-                        required
-                    >
-                    </input>
-                    <p>City, State</p>
-                    <input
-                        type = "text"
+                        id="edu-city"
+                        type="text"
+                        placeholder="Austin, TX"
                         value={form.city}
-                        onChange={(e) => handleChange("city",e.target.value)}
+                        onChange={(e) => handleChange("city", e.target.value)}
                         required
-                    >
-                    </input>
-                    <p>GPA</p>
-                    <input
-                        type = "text"
-                        value={form.gpa}
-                        onChange={(e) => handleChange("gpa",e.target.value)}
-                        required
-                    >
-                    </input>
-                    <div className = "dates">
-                        Start 
-                        <input
-                        type = "date"
-                        value={form.sDate}
-                        onChange={(e) => handleChange("sDate",e.target.value)}
-                        required
-                        ></input>
-                        End
-                        <input
-                        type = "date"
-                        value={form.eDate}
-                        onChange={(e) => handleChange("eDate",e.target.value)}
-                        required
-                        ></input>
-                    </div>
-                    <button type="submit" id = "generalSubmit">
-                    Submit
-                    </button>
-                </form>
+                    />
+                </div>
             </div>
-            
-        </div>
+
+            <div className="field field-narrow">
+                <label className="field-label" htmlFor="edu-gpa">GPA</label>
+                <input
+                    id="edu-gpa"
+                    type="text"
+                    placeholder="3.8"
+                    value={form.gpa}
+                    onChange={(e) => handleChange("gpa", e.target.value)}
+                    required
+                />
+            </div>
+
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="edu-start">Start date</label>
+                    <input
+                        id="edu-start"
+                        type="date"
+                        value={form.sDate}
+                        onChange={(e) => handleChange("sDate", e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="edu-end">End date</label>
+                    <input
+                        id="edu-end"
+                        type="date"
+                        value={form.eDate}
+                        onChange={(e) => handleChange("eDate", e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="form-footer">
+                <button type="submit" className="btn btn-primary">Add education</button>
+            </div>
+        </form>
     )
 }
-

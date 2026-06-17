@@ -1,30 +1,39 @@
-import { useState } from "react";
+import { Envelope, Phone, MapPin } from "@phosphor-icons/react";
 
-export default function GeneralCV(){
+export default function GeneralCV({ data }) {
+    const hasName = Boolean(data?.name);
+    const hasContact = Boolean(data?.email || data?.number || data?.location);
 
-    return(
-        <div className = "personalSection">
-            <h1 id="personalHeader"></h1>
-            <div className="bio">
-                <p id = "email"></p>
-                <p id = "phone"></p>
-                <p id = "location"></p>
-            </div>
-            <div className = "bar"></div>
+    return (
+        <div className="resume-header">
+            <h1 className={`resume-name ${hasName ? "" : "is-placeholder"}`}>
+                {hasName ? data.name : "Your Name"}
+            </h1>
+
+            {hasContact ? (
+                <div className="resume-contact">
+                    {data.email && (
+                        <span className="resume-contact-item">
+                            <Envelope size={15} weight="bold" />
+                            {data.email}
+                        </span>
+                    )}
+                    {data.number && (
+                        <span className="resume-contact-item">
+                            <Phone size={15} weight="bold" />
+                            {data.number}
+                        </span>
+                    )}
+                    {data.location && (
+                        <span className="resume-contact-item">
+                            <MapPin size={15} weight="bold" />
+                            {data.location}
+                        </span>
+                    )}
+                </div>
+            ) : (
+                <p className="resume-hint">Add your contact details on the left, they'll show up here.</p>
+            )}
         </div>
     )
-}
-
-export function setGeneral(formData){
-    const pHeader = document.getElementById("personalHeader");
-    pHeader.innerHTML = formData.name;
-
-    const email = document.getElementById("email")
-    email.innerHTML = formData.email + " | ";
-
-    const phone = document.getElementById("phone")
-    phone.innerHTML = formData.number + " | ";
-
-    const location = document.getElementById("location")
-    location.innerHTML = formData.location
 }

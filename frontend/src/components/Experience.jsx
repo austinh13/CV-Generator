@@ -1,39 +1,8 @@
-
 import { useState } from "react";
-import jobs from '../jobs.json'; // Import jobs if not already
-
-// /api/rewrite-description
-
-// https://cv-generator-sz5i.onrender.com/api/rewrite-description
-async function rewriteDescription(description) {
-  const res = await fetch("https://cv-generator-sz5i.onrender.com/api/rewrite-description", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description }),
-  });
-
-  let data = {};
-  try {
-    data = await res.json();
-  } catch (err) {
-    console.error("Failed to parse JSON:", err);
-  }
-
-  return data.rewritten || description;
-
-}
-
-export function findJob(title) {
-  const lowerTitle = title.toLowerCase();
-  return jobs.find(job => {
-    const jobTitle = job.title.toLowerCase();
-    return jobTitle.includes(lowerTitle) || jobTitle.includes(lowerTitle + "s");
-  });
-}
+import { Sparkle } from "@phosphor-icons/react";
+import { rewriteDescription, findJob } from "../utils/jobHelpers";
 
 export default function Experience({ addExp }){
-    const [isOpen, setIsOpen] = useState(false);
-
     const [decision,setDecision] = useState(false);
 
     const [form, setForm] = useState({
@@ -70,80 +39,108 @@ export default function Experience({ addExp }){
     };
 
     return(
-        <div className = "experienceInfo">
-            <button id = "educationButton" 
-            onClick={() => setIsOpen(!isOpen)}
-            >
-                Experience
-            </button>
-            <div className={`expContent ${isOpen ? "show" : "hide"}`}>
-                <form className="formGeneral" onSubmit={handleSubmit}>
-                    <p>Company</p>
+        <form className="form-grid" onSubmit={handleSubmit}>
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="exp-job">Job title</label>
                     <input
+                        id="exp-job"
                         type="text"
+                        placeholder="Software Engineer"
+                        value={form.job}
+                        onChange={(e) => handleChange("job", e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="exp-company">Company</label>
+                    <input
+                        id="exp-company"
+                        type="text"
+                        placeholder="Acme Robotics"
                         value={form.company}
                         onChange={(e) => handleChange("company", e.target.value)}
                         required
-                    >
-                    </input>
-                    <p>Job Title</p>
-                    <input
-                        type = "text"
-                        value={form.job}
-                        onChange={(e) => handleChange("job",e.target.value)}
-                        required
-                    >
-                    </input>
-                    <p>Address</p>
-                    <input
-                        type = "text"
-                        value={form.address}
-                        onChange={(e) => handleChange("address",e.target.value)}
-                        required
-                    >
-                    </input>
-                    <p>Short Description</p>
-                    <textarea
-                        id="jobDescrip"
-                        placeholder="Type: Suggested for suggested description (not all jobs guaranteed) OR type your own under 150 Characters"
-                        maxLength={150}
-                        rows={3}         // how tall it is
-                        cols={20}        // how wide it is
-                        value={form.descrip}
-                        onChange={(e) => handleChange("descrip", e.target.value)}
-                        required
                     />
-                    <p>Use AI to improve job description</p>
+                </div>
+            </div>
+
+            <div className="field">
+                <label className="field-label" htmlFor="exp-address">Location</label>
+                <input
+                    id="exp-address"
+                    type="text"
+                    placeholder="Remote · Austin, TX"
+                    value={form.address}
+                    onChange={(e) => handleChange("address", e.target.value)}
+                    required
+                />
+            </div>
+
+            <div className="field">
+                <label className="field-label" htmlFor="exp-descrip">Description</label>
+                <p className="field-help">Type your own, or type "suggested" for a description based on your job title.</p>
+                <textarea
+                    id="exp-descrip"
+                    placeholder="Led a team of 4 to ship a new onboarding flow..."
+                    maxLength={150}
+                    rows={3}
+                    value={form.descrip}
+                    onChange={(e) => handleChange("descrip", e.target.value)}
+                    required
+                />
+                <span className="field-char-count">{form.descrip.length}/150</span>
+            </div>
+
+            <div className="toggle-row">
+                <span className="toggle-row-icon">
+                    <Sparkle size={16} weight="fill" />
+                </span>
+                <div className="toggle-row-text">
+                    <span className="toggle-row-title">Polish with AI</span>
+                    <span className="toggle-row-desc">
+                        Rewrites your description for stronger phrasing. The first request in a while can take a minute or two while the server wakes up.{" "}
+                        <a href="https://austinh.vercel.app/" target="_blank" rel="noreferrer">See a demo</a>
+                    </span>
+                </div>
+                <label className="switch">
                     <input
-                        id = "aiChecker"
                         type="checkbox"
                         checked={decision}
                         onChange={() => setDecision(!decision)}
-                    >
-                    </input>
-                    <div className = "dates">
-                        Start 
-                        <input
-                        type = "date"
-                        value={form.sDate}
-                        onChange={(e) => handleChange("sDate",e.target.value)}
-                        required
-                        ></input>
-                        End
-                        <input
-                        type = "date"
-                        value={form.eDate}
-                        onChange={(e) => handleChange("eDate",e.target.value)}
-                        required
-                        ></input>
-                    </div>
-                    <button type="submit" id = "generalSubmit">
-                    Submit
-                    </button>
-                </form>
+                        aria-label="Polish description with AI"
+                    />
+                    <span className="switch-track"></span>
+                    <span className="switch-thumb"></span>
+                </label>
             </div>
-            
-        </div>
+
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="exp-start">Start date</label>
+                    <input
+                        id="exp-start"
+                        type="date"
+                        value={form.sDate}
+                        onChange={(e) => handleChange("sDate", e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="exp-end">End date</label>
+                    <input
+                        id="exp-end"
+                        type="date"
+                        value={form.eDate}
+                        onChange={(e) => handleChange("eDate", e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="form-footer">
+                <button type="submit" className="btn btn-primary">Add experience</button>
+            </div>
+        </form>
     )
 }
-
