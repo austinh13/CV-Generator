@@ -1,12 +1,7 @@
-import { GraduationCap, Trash } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
+import { formatDateUS } from "../utils/formatDate";
 
 export default function EducationCV({ sections, setSections }) {
-
-    const formatDateUS = (dateString) => {
-        if (!dateString) return "";
-        const [year, month, day] = dateString.split("-");
-        return `${month}/${day}/${year}`;
-    };
 
     const handleDelete = (indexToDelete) => {
         setSections(prevSections =>
@@ -16,24 +11,25 @@ export default function EducationCV({ sections, setSections }) {
 
     return (
         <div className="resume-section">
-            <h2 className="resume-section-title">
-                <GraduationCap size={18} weight="bold" />
-                Education
-            </h2>
+            <h2 className="resume-section-title">Education</h2>
 
             {sections.length === 0 ? (
-                <div className="resume-empty">
-                    <GraduationCap size={28} weight="light" />
-                    <p>Your education will show up here once you add a school on the left.</p>
-                </div>
+                <p className="resume-empty-line">Add a school on the left to see it appear here.</p>
             ) : (
-                <div className="resume-list">
+                <div className="resume-entries">
                     {sections.map((sec, index) => (
-                        <div key={index} className="resume-item">
-                            <div className="resume-item-main">
-                                <p className="resume-item-title">{sec.school}{sec.city ? `, ${sec.city}` : ""}</p>
-                                <p className="resume-item-sub">{sec.degree}{sec.gpa ? ` · GPA ${sec.gpa}` : ""}</p>
-                                <p className="resume-item-meta">{formatDateUS(sec.sDate)} – {formatDateUS(sec.eDate)}</p>
+                        <div key={index} className="resume-entry">
+                            <div className="resume-row">
+                                <span className="resume-row-left resume-strong">{sec.school}</span>
+                                <span className="resume-row-right">{sec.city}</span>
+                            </div>
+                            <div className="resume-row">
+                                <span className="resume-row-left resume-em">
+                                    {sec.degree}{sec.gpa ? ` (GPA: ${sec.gpa})` : ""}
+                                </span>
+                                <span className="resume-row-right resume-em">
+                                    {formatDateUS(sec.sDate)} &ndash; {formatDateUS(sec.eDate)}
+                                </span>
                             </div>
                             <button
                                 type="button"
@@ -41,7 +37,7 @@ export default function EducationCV({ sections, setSections }) {
                                 aria-label={`Remove ${sec.school}`}
                                 onClick={() => handleDelete(index)}
                             >
-                                <Trash size={15} weight="bold" />
+                                <Trash size={13} weight="bold" />
                             </button>
                         </div>
                     ))}

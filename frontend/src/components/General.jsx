@@ -13,28 +13,29 @@ export default function General({ formData, handleGeneralChange }) {
                 />
             </div>
 
-            <div className="field">
-                <label className="field-label" htmlFor="general-email">Email</label>
-                <input
-                    id="general-email"
-                    type="email"
-                    placeholder="jordan@email.com"
-                    value={formData.email}
-                    onChange={(e) => handleGeneralChange("email", e.target.value)}
-                    required
-                />
-            </div>
-
-            <div className="field">
-                <label className="field-label" htmlFor="general-number">Phone number</label>
-                <input
-                    id="general-number"
-                    type="tel"
-                    placeholder="(555) 123-4567"
-                    value={formData.number}
-                    onChange={(e) => handleGeneralChange("number", e.target.value)}
-                    required
-                />
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="general-email">Email</label>
+                    <input
+                        id="general-email"
+                        type="email"
+                        placeholder="jordan@email.com"
+                        value={formData.email}
+                        onChange={(e) => handleGeneralChange("email", e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="general-number">Phone number</label>
+                    <input
+                        id="general-number"
+                        type="tel"
+                        placeholder="(555) 123-4567"
+                        value={formData.number}
+                        onChange={(e) => handleGeneralChange("number", e.target.value)}
+                        required
+                    />
+                </div>
             </div>
 
             <div className="field">
@@ -47,6 +48,29 @@ export default function General({ formData, handleGeneralChange }) {
                     onChange={(e) => handleGeneralChange("location", e.target.value)}
                     required
                 />
+            </div>
+
+            <div className="field-row">
+                <div className="field">
+                    <label className="field-label" htmlFor="general-linkedin">LinkedIn</label>
+                    <input
+                        id="general-linkedin"
+                        type="text"
+                        placeholder="linkedin.com/in/jordanlee"
+                        value={formData.linkedin}
+                        onChange={(e) => handleGeneralChange("linkedin", e.target.value)}
+                    />
+                </div>
+                <div className="field">
+                    <label className="field-label" htmlFor="general-github">GitHub</label>
+                    <input
+                        id="general-github"
+                        type="text"
+                        placeholder="github.com/jordanlee"
+                        value={formData.github}
+                        onChange={(e) => handleGeneralChange("github", e.target.value)}
+                    />
+                </div>
             </div>
         </form>
     )

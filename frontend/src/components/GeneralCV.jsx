@@ -1,8 +1,20 @@
-import { Envelope, Phone, MapPin } from "@phosphor-icons/react";
+function toHref(value, kind) {
+    if (!value) return "";
+    if (value.startsWith("http://") || value.startsWith("https://")) return value;
+    if (kind === "email") return `mailto:${value}`;
+    return `https://${value.replace(/^\/+/, "")}`;
+}
 
 export default function GeneralCV({ data }) {
     const hasName = Boolean(data?.name);
-    const hasContact = Boolean(data?.email || data?.number || data?.location);
+
+    const contactItems = [
+        data?.number ? { label: data.number } : null,
+        data?.email ? { label: data.email, href: toHref(data.email, "email") } : null,
+        data?.location ? { label: data.location } : null,
+        data?.linkedin ? { label: data.linkedin.replace(/^https?:\/\//, ""), href: toHref(data.linkedin) } : null,
+        data?.github ? { label: data.github.replace(/^https?:\/\//, ""), href: toHref(data.github) } : null,
+    ].filter(Boolean);
 
     return (
         <div className="resume-header">
@@ -10,29 +22,21 @@ export default function GeneralCV({ data }) {
                 {hasName ? data.name : "Your Name"}
             </h1>
 
-            {hasContact ? (
-                <div className="resume-contact">
-                    {data.email && (
-                        <span className="resume-contact-item">
-                            <Envelope size={15} weight="bold" />
-                            {data.email}
+            {contactItems.length > 0 ? (
+                <p className="resume-contact">
+                    {contactItems.map((item, i) => (
+                        <span key={i}>
+                            {i > 0 && <span className="resume-contact-sep">|</span>}
+                            {item.href ? (
+                                <a href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+                            ) : (
+                                item.label
+                            )}
                         </span>
-                    )}
-                    {data.number && (
-                        <span className="resume-contact-item">
-                            <Phone size={15} weight="bold" />
-                            {data.number}
-                        </span>
-                    )}
-                    {data.location && (
-                        <span className="resume-contact-item">
-                            <MapPin size={15} weight="bold" />
-                            {data.location}
-                        </span>
-                    )}
-                </div>
+                    ))}
+                </p>
             ) : (
-                <p className="resume-hint">Add your contact details on the left, they'll show up here.</p>
+                <p className="resume-hint">Add your contact details on the left.</p>
             )}
         </div>
     )

@@ -1,31 +1,30 @@
 import { Trash } from "@phosphor-icons/react";
 import { formatDateUS } from "../utils/formatDate";
 
-export default function ExperienceCV({ sections, setExp }) {
+export default function ProjectsCV({ sections, setSections }) {
 
   const handleDelete = (indexToDelete) => {
-    setExp(prevSections =>
+    setSections(prevSections =>
       prevSections.filter((_, index) => index !== indexToDelete)
     );
   };
 
   return (
     <div className="resume-section">
-      <h2 className="resume-section-title">Experience</h2>
+      <h2 className="resume-section-title">Projects</h2>
 
       {sections.length === 0 ? (
-        <p className="resume-empty-line">Add a role on the left to see it appear here.</p>
+        <p className="resume-empty-line">Add a project on the left to see it appear here.</p>
       ) : (
         <div className="resume-entries">
           {sections.map((sec, index) => (
             <div key={index} className="resume-entry">
               <div className="resume-row">
-                <span className="resume-row-left resume-strong">{sec.job}</span>
+                <span className="resume-row-left">
+                  <span className="resume-strong">{sec.name}</span>
+                  {sec.technologies && <span className="resume-em"> | {sec.technologies}</span>}
+                </span>
                 <span className="resume-row-right">{formatDateUS(sec.sDate)} &ndash; {formatDateUS(sec.eDate)}</span>
-              </div>
-              <div className="resume-row">
-                <span className="resume-row-left resume-em">{sec.company}</span>
-                <span className="resume-row-right resume-em">{sec.address}</span>
               </div>
               {sec.descrip && (
                 <ul className="resume-bullets">
@@ -35,7 +34,7 @@ export default function ExperienceCV({ sections, setExp }) {
               <button
                 type="button"
                 className="resume-item-delete"
-                aria-label={`Remove ${sec.job} at ${sec.company}`}
+                aria-label={`Remove ${sec.name}`}
                 onClick={() => handleDelete(index)}
               >
                 <Trash size={13} weight="bold" />

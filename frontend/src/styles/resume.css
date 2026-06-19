@@ -1,6 +1,38 @@
+/* CMU Serif (Computer Modern), self-hosted + subset to Latin glyphs only.
+   This is the default LaTeX article font, used here to match the
+   "Jake's Resume" template (https://github.com/jakeryang/resume). */
+@font-face {
+  font-family: "CMU Serif";
+  font-style: normal;
+  font-weight: 400 500;
+  src: url("/fonts/cmu-serif/cmu-serif-500-roman.subset.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "CMU Serif";
+  font-style: italic;
+  font-weight: 400 500;
+  src: url("/fonts/cmu-serif/cmu-serif-500-italic.subset.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "CMU Serif";
+  font-style: normal;
+  font-weight: 600 700;
+  src: url("/fonts/cmu-serif/cmu-serif-700-roman.subset.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "CMU Serif";
+  font-style: italic;
+  font-weight: 600 700;
+  src: url("/fonts/cmu-serif/cmu-serif-700-italic.subset.woff2") format("woff2");
+  font-display: swap;
+}
+
 .resume-shell {
   width: 100%;
-  max-width: 640px;
+  max-width: 660px;
   margin: 0 auto;
 }
 
@@ -16,189 +48,173 @@
   margin-bottom: var(--space-3);
 }
 
+/* The page itself: plain, square-cornered, black on white, like a printed
+   letter-size sheet. No accent color, no icons, no rounded corners. */
 .resume {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
+  background: #ffffff;
+  color: #000000;
+  border-radius: 3px;
   box-shadow: var(--shadow-lg);
-  padding: var(--space-7) var(--space-6);
-  font-family: var(--font-body);
-  color: var(--color-ink);
+  padding: 2.35rem 2.1rem;
+  font-family: "CMU Serif", "Times New Roman", Times, serif;
+  font-size: 0.78rem;
+  line-height: 1.35;
   min-height: 60vh;
 }
 
+.resume a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Header */
 .resume-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
   text-align: center;
-  padding-bottom: var(--space-5);
-  margin-bottom: var(--space-5);
-  border-bottom: 1px solid var(--color-border-soft);
+  margin-bottom: 0.65rem;
 }
 
 .resume-name {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
+  font-family: "CMU Serif", "Times New Roman", Times, serif;
+  font-size: 1.85rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
 }
 
 .resume-name.is-placeholder {
-  color: var(--color-ink-faint);
-  font-weight: 600;
+  color: #8a8a8a;
 }
 
 .resume-contact {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--color-ink-soft);
+  font-size: 0.74rem;
+  margin-top: 0.2rem;
 }
 
-.resume-contact-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.resume-contact-item svg {
-  color: var(--color-accent);
-  flex-shrink: 0;
+.resume-contact-sep {
+  margin: 0 0.4em;
 }
 
 .resume-hint {
-  font-size: var(--text-xs);
-  color: var(--color-ink-faint);
+  font-size: 0.74rem;
   font-style: italic;
+  color: #8a8a8a;
+  margin-top: 0.2rem;
 }
 
+/* Sections */
 .resume-section {
-  margin-bottom: var(--space-5);
-}
-
-.resume-section:last-child {
-  margin-bottom: 0;
+  margin-top: 0.85rem;
 }
 
 .resume-section-title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-display);
-  font-size: var(--text-md);
-  font-weight: 600;
-  color: var(--color-ink);
-  margin-bottom: var(--space-3);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #000;
+  padding-bottom: 1px;
+  margin-bottom: 0.4rem;
 }
 
-.resume-section-title svg {
-  color: var(--color-accent);
+.resume-empty-line {
+  font-size: 0.76rem;
+  font-style: italic;
+  color: #9a9a9a;
 }
 
-.resume-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  text-align: center;
-  padding: var(--space-5) var(--space-4);
-  border: 1.5px dashed var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-ink-faint);
-}
-
-.resume-empty svg {
-  color: var(--color-border-strong);
-}
-
-.resume-empty p {
-  font-size: var(--text-sm);
-  max-width: 32ch;
-}
-
-.resume-list {
+.resume-entries {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 0.55rem;
 }
 
-.resume-item {
+.resume-entry {
+  position: relative;
+}
+
+.resume-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-3);
-  animation: itemIn var(--duration-slow) var(--ease-out);
+  align-items: baseline;
+  gap: 0.75rem;
 }
 
-.resume-item-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.resume-row-left,
+.resume-row-right {
   min-width: 0;
 }
 
-.resume-item-title {
-  font-weight: 600;
-  font-size: var(--text-base);
+.resume-row-right {
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.resume-item-sub {
-  font-size: var(--text-sm);
-  color: var(--color-ink-soft);
+.resume-strong {
+  font-weight: 700;
 }
 
-.resume-item-desc {
-  font-size: var(--text-sm);
-  color: var(--color-ink-soft);
-  line-height: 1.5;
-  margin-top: 2px;
+.resume-em {
+  font-style: italic;
 }
 
-.resume-item-meta {
-  font-size: var(--text-xs);
-  color: var(--color-ink-faint);
-  margin-top: 2px;
+.resume-bullets {
+  margin: 0.25rem 0 0;
+  padding-left: 1.05rem;
 }
 
+.resume-bullets li {
+  margin-bottom: 0.12rem;
+}
+
+.resume-bullets li::marker {
+  font-size: 0.85em;
+}
+
+/* Technical skills block */
+.resume-skills-line {
+  margin-bottom: 0.1rem;
+}
+
+/* Quiet delete control, sits outside the document content visually */
 .resume-item-delete {
-  width: 1.875rem;
-  height: 1.875rem;
+  position: absolute;
+  top: -2px;
+  right: -1.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
   border-radius: 50%;
   background: transparent;
-  border: 1px solid transparent;
-  color: var(--color-ink-faint);
+  border: none;
+  color: #b9b9b9;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    background var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.resume-entry:hover .resume-item-delete,
+.resume-item-delete:focus-visible {
+  opacity: 1;
 }
 
 .resume-item-delete:hover {
-  background: var(--color-danger-soft);
   color: var(--color-danger-strong);
 }
 
-@keyframes itemIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
+@media (max-width: 720px) {
+  .resume-item-delete {
+    right: -0.3rem;
     opacity: 1;
-    transform: translateY(0);
+    background: rgba(0, 0, 0, 0.04);
   }
 }
 
 @media (max-width: 600px) {
   .resume {
-    padding: var(--space-5) var(--space-4);
+    padding: 1.5rem 1.2rem;
   }
 }

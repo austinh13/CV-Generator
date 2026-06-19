@@ -60,14 +60,13 @@ export default function Education({ addEducation }) {
             </div>
 
             <div className="field field-narrow">
-                <label className="field-label" htmlFor="edu-gpa">GPA</label>
+                <label className="field-label" htmlFor="edu-gpa">GPA (optional)</label>
                 <input
                     id="edu-gpa"
                     type="text"
                     placeholder="3.8"
                     value={form.gpa}
                     onChange={(e) => handleChange("gpa", e.target.value)}
-                    required
                 />
             </div>
 

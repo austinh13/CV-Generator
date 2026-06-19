@@ -4,7 +4,10 @@ import General from './components/General'
 import Education from './components/Education'
 import CV from './components/CV'
 import Experience from './components/Experience';
+import Projects from './components/Projects';
+import Skills from './components/Skills';
 import SectionCard from './components/SectionCard';
+import { formatDateUS } from './utils/formatDate';
 import { jsPDF } from "jspdf";
 import {
   DownloadSimple,
@@ -13,19 +16,27 @@ import {
   IdentificationCard,
   GraduationCap,
   Briefcase,
+  FolderSimple,
+  Toolbox,
   NotePencil,
   FileText,
 } from "@phosphor-icons/react";
 
 const pdfWidth = 215.9;
 const pdfHeight = 279.4;
+const MARGIN_X = 14;
+const PAGE_RIGHT = pdfWidth - MARGIN_X;
+const PAGE_CENTER = pdfWidth / 2;
+
 function App() {
 
   const [generalData, setGeneralData] = useState({
       name: "",
       email: "",
       number: "",
-      location: ""
+      location: "",
+      linkedin: "",
+      github: ""
     });
 
   // An array of educations
@@ -33,38 +44,55 @@ function App() {
 
   const [experienceData, setExperienceData] = useState([]);
 
+  const [projectsData, setProjectsData] = useState([]);
+
+  const [skillsData, setSkillsData] = useState({
+    languages: "",
+    frameworks: "",
+    developerTools: "",
+    libraries: ""
+  });
+
   const [downloadState, setDownloadState] = useState("idle"); // idle | working | done
   const [mobilePane, setMobilePane] = useState("edit"); // edit | preview
 
   const personalComplete = Boolean(
     generalData.name && generalData.email && generalData.number && generalData.location
   );
+  const skillsComplete = Boolean(
+    skillsData.languages || skillsData.frameworks || skillsData.developerTools || skillsData.libraries
+  );
 
-  const generatePDF = () => {
-      height = 55; // reset the running cursor so repeat downloads don't drift down the page
+  const generatePDF = async () => {
+      height = 42; // reset the running cursor so repeat downloads don't drift down the page
       const doc = new jsPDF({
         unit: "mm",
         format: [pdfWidth, pdfHeight] // Letter
       });
 
-      doc.setFont("times", "normal"); // Optional: set style ("normal", "bold", "italic", "bolditalic")
+      await registerResumeFont(doc);
+      doc.setFont("CMUSerif", "normal");
 
-
-      createBio(doc,generalData);
-      createEducations(doc,educationData);
-      createJobs(doc,experienceData);
+      createBio(doc, generalData);
+      createEducations(doc, educationData);
+      createJobs(doc, experienceData);
+      createProjects(doc, projectsData);
+      createSkills(doc, skillsData);
       doc.save("resume.pdf");
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (downloadState === "working") return;
     setDownloadState("working");
-    // let the UI paint the "working" state before the (synchronous) PDF build runs
-    requestAnimationFrame(() => {
-      generatePDF();
+    try {
+      await generatePDF();
       setDownloadState("done");
-      setTimeout(() => setDownloadState("idle"), 1800);
-    });
+    } catch (err) {
+      console.error("Failed to generate PDF", err);
+      setDownloadState("idle");
+      return;
+    }
+    setTimeout(() => setDownloadState("idle"), 1800);
   };
 
 
@@ -76,8 +104,16 @@ function App() {
     setEducationData(prev => [...prev, newEducation]);
   };
 
-  const addExpereince = (newExp) => {
+  const addExperience = (newExp) => {
     setExperienceData(prev => [...prev, newExp]);
+  };
+
+  const addProject = (newProject) => {
+    setProjectsData(prev => [...prev, newProject]);
+  };
+
+  const handleSkillsChange = (field, value) => {
+    setSkillsData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -98,6 +134,8 @@ function App() {
             personalComplete={personalComplete}
             hasEducation={educationData.length > 0}
             hasExperience={experienceData.length > 0}
+            hasProjects={projectsData.length > 0}
+            hasSkills={skillsComplete}
           />
           <button
             type="button"
@@ -164,7 +202,25 @@ function App() {
             subtitle="Roles, companies, impact"
             meta={experienceData.length > 0 ? <span className="section-card__badge">{experienceData.length}</span> : null}
           >
-            <Experience addExp={addExpereince}></Experience>
+            <Experience addExp={addExperience}></Experience>
+          </SectionCard>
+
+          <SectionCard
+            icon={FolderSimple}
+            title="Projects"
+            subtitle="Personal or class projects"
+            meta={projectsData.length > 0 ? <span className="section-card__badge">{projectsData.length}</span> : null}
+          >
+            <Projects addProject={addProject} />
+          </SectionCard>
+
+          <SectionCard
+            icon={Toolbox}
+            title="Technical skills"
+            subtitle="Languages, frameworks, tools"
+            meta={skillsComplete ? <CheckCircle size={20} weight="fill" color="var(--color-accent)" /> : null}
+          >
+            <Skills skillsData={skillsData} handleSkillsChange={handleSkillsChange} />
           </SectionCard>
         </section>
 
@@ -175,8 +231,11 @@ function App() {
               generalData={generalData}
               educationData={educationData}
               experienceData={experienceData}
+              projectsData={projectsData}
+              skillsData={skillsData}
               setSections={setEducationData}
               setExp={setExperienceData}
+              setProjects={setProjectsData}
             />
           </div>
         </section>
@@ -185,12 +244,12 @@ function App() {
   );
 }
 
-function ProgressPill({ personalComplete, hasEducation, hasExperience }) {
-  const steps = [personalComplete, hasEducation, hasExperience];
+function ProgressPill({ personalComplete, hasEducation, hasExperience, hasProjects, hasSkills }) {
+  const steps = [personalComplete, hasEducation, hasExperience, hasProjects, hasSkills];
   const done = steps.filter(Boolean).length;
   return (
     <div className="progress-pill">
-      <span>{done} of 3 done</span>
+      <span>{done} of {steps.length} done</span>
       <span className="progress-pill-dots">
         {steps.map((filled, i) => (
           <span key={i} className={`progress-pill-dot ${filled ? "is-filled" : ""}`} />
@@ -202,63 +261,224 @@ function ProgressPill({ personalComplete, hasEducation, hasExperience }) {
 
 export default App;
 
-function createBio(doc,generalData){
-      doc.setFontSize(23);
-      doc.setFont("times","bold");
-      doc.text(`${generalData.name}`,90,20);
+// ---------------------------------------------------------------------
+// PDF generation
+//
+// The resume is meant to match Jake Ryan's well known LaTeX resume
+// template (github.com/jakeryang/resume): a single black-and-white,
+// densely set page using the default LaTeX article font, Computer
+// Modern. We embed a subsetted copy of that font (CMU Serif) into the
+// PDF so the download genuinely matches the on-screen preview, rather
+// than approximating with a built-in PDF font.
+// ---------------------------------------------------------------------
 
-      doc.setFont("times","normal");
-      doc.setFontSize(14);
-      doc.text(`${generalData.email}  |  ${generalData.number}  |  ${generalData.location}`, 45, 30);
-
-      doc.setLineWidth(0.3);
-      doc.line(10, 37, pdfWidth - 10, 37); 
+function bytesToBase64(buffer) {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
 }
 
-let height = 55;
+async function registerResumeFont(doc) {
+  const files = [
+    ["cmu-serif-500-roman.subset.ttf", "normal"],
+    ["cmu-serif-500-italic.subset.ttf", "italic"],
+    ["cmu-serif-700-roman.subset.ttf", "bold"],
+    ["cmu-serif-700-italic.subset.ttf", "bolditalic"],
+  ];
 
-function createEducations(doc,educationData){
-    doc.setFontSize(18);
-    doc.text("Education",(pdfWidth/2) - 15,45);
-    educationData.forEach((section) =>{
-      doc.setFontSize(14);
-      doc.setFont("times","bold");
-      doc.text(`${section.school} - ${section.city}`,12,height);
-      height+=7;
-      doc.setFontSize(13);
-      doc.setFont("times","normal");
-      doc.text(`${section.degree},  ${section.sDate} to ${section.eDate}`,12,height);
-      height+=7;
-      doc.text(`GPA: ${section.gpa}`,12,height);
-      height+=9;
-    })
-    
-    doc.setLineWidth(0.3);
-    doc.line(10, height-4, pdfWidth - 10, height-4); 
-    height+=5;
+  for (const [file, style] of files) {
+    const res = await fetch(`/fonts/cmu-serif/${file}`);
+    const buffer = await res.arrayBuffer();
+    const base64 = bytesToBase64(buffer);
+    doc.addFileToVFS(file, base64);
+    doc.addFont(file, "CMUSerif", style);
+  }
 }
 
-function createJobs(doc,experienceData){
-  doc.setFontSize(18)
-  doc.text("Experience",(pdfWidth/2)-15,height)
-  height+=9;
-  experienceData.forEach((section)=>{
-    doc.setFontSize(14);
-    doc.setFont("times","bold");
-    doc.text(`${section.job} at ${section.company} - ${section.address}`,12,height)
-    height+=7;
-    doc.setFont("times","normal");
-    doc.text(`${section.descrip}`,12,height, { maxWidth: 200 })
-    if(section.descrip.length >= 180){
-      height+=18;
+function toAbsoluteUrl(value) {
+  if (!value) return "";
+  return value.startsWith("http") ? value : `https://${value.replace(/^\/+/, "")}`;
+}
+
+// Draws a centered row of " | "-separated segments, underlining and
+// linking any segment that has a url (mirrors the template's
+// \href{...}{\underline{...}} contact line).
+function drawContactRow(doc, segments, y, fontSize) {
+  if (segments.length === 0) return;
+  doc.setFont("CMUSerif", "normal");
+  doc.setFontSize(fontSize);
+
+  const sep = "    ";
+  const sepWidth = doc.getTextWidth(sep);
+  const widths = segments.map((s) => doc.getTextWidth(s.text));
+  const totalWidth = widths.reduce((a, b) => a + b, 0) + sepWidth * (segments.length - 1);
+
+  let x = PAGE_CENTER - totalWidth / 2;
+  segments.forEach((seg, i) => {
+    if (seg.url) {
+      doc.textWithLink(seg.text, x, y, { url: seg.url });
+      doc.setDrawColor(0);
+      doc.setLineWidth(0.1);
+      doc.line(x, y + 0.7, x + widths[i], y + 0.7);
+    } else {
+      doc.text(seg.text, x, y);
     }
-    else if(section.descrip.length >= 100){
-      height += 13;
+    x += widths[i];
+    if (i < segments.length - 1) {
+      doc.text("|", x + sepWidth / 2 - doc.getTextWidth("|") / 2, y);
+      x += sepWidth;
     }
-    else{
-    height+=7;
+  });
+}
+
+function sectionHeading(doc, label, y) {
+  doc.setFont("CMUSerif", "bold");
+  doc.setFontSize(13);
+  doc.text(label.toUpperCase(), MARGIN_X, y);
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.35);
+  doc.line(MARGIN_X, y + 1.6, PAGE_RIGHT, y + 1.6);
+}
+
+function createBio(doc, generalData) {
+  doc.setFont("CMUSerif", "bold");
+  doc.setFontSize(26);
+  doc.text((generalData.name || "").toUpperCase(), PAGE_CENTER, 20, { align: "center" });
+
+  const segments = [
+    generalData.number ? { text: generalData.number } : null,
+    generalData.email ? { text: generalData.email, url: `mailto:${generalData.email}` } : null,
+    generalData.location ? { text: generalData.location } : null,
+    generalData.linkedin ? { text: generalData.linkedin.replace(/^https?:\/\//, ""), url: toAbsoluteUrl(generalData.linkedin) } : null,
+    generalData.github ? { text: generalData.github.replace(/^https?:\/\//, ""), url: toAbsoluteUrl(generalData.github) } : null,
+  ].filter(Boolean);
+
+  drawContactRow(doc, segments, 27, 10);
+
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.3);
+  doc.line(MARGIN_X, 33, PAGE_RIGHT, 33);
+}
+
+let height = 42;
+
+function createEducations(doc, educationData) {
+  if (educationData.length === 0) return;
+  sectionHeading(doc, "Education", height);
+  height += 7;
+
+  educationData.forEach((section) => {
+    doc.setFont("CMUSerif", "bold");
+    doc.setFontSize(11);
+    doc.text(section.school, MARGIN_X, height);
+    doc.setFont("CMUSerif", "normal");
+    doc.text(section.city || "", PAGE_RIGHT, height, { align: "right" });
+    height += 5;
+
+    doc.setFont("CMUSerif", "italic");
+    doc.setFontSize(9.5);
+    const degreeLine = section.gpa ? `${section.degree} (GPA: ${section.gpa})` : section.degree;
+    doc.text(degreeLine, MARGIN_X, height);
+    doc.text(`${formatDateUS(section.sDate)} \u2013 ${formatDateUS(section.eDate)}`, PAGE_RIGHT, height, { align: "right" });
+    height += 6.5;
+  });
+  height += 2;
+}
+
+function createJobs(doc, experienceData) {
+  if (experienceData.length === 0) return;
+  sectionHeading(doc, "Experience", height);
+  height += 7;
+
+  experienceData.forEach((section) => {
+    doc.setFont("CMUSerif", "bold");
+    doc.setFontSize(11);
+    doc.text(section.job, MARGIN_X, height);
+    doc.setFont("CMUSerif", "normal");
+    doc.text(`${formatDateUS(section.sDate)} \u2013 ${formatDateUS(section.eDate)}`, PAGE_RIGHT, height, { align: "right" });
+    height += 5;
+
+    doc.setFont("CMUSerif", "italic");
+    doc.setFontSize(9.5);
+    doc.text(section.company, MARGIN_X, height);
+    doc.text(section.address || "", PAGE_RIGHT, height, { align: "right" });
+    height += 5.5;
+
+    if (section.descrip) {
+      doc.setFont("CMUSerif", "normal");
+      doc.setFontSize(9.5);
+      const bulletX = MARGIN_X + 4;
+      doc.text("\u2022", MARGIN_X + 1, height);
+      const lines = doc.splitTextToSize(section.descrip, PAGE_RIGHT - bulletX);
+      doc.text(lines, bulletX, height);
+      height += lines.length * 4.3 + 2;
+    } else {
+      height += 1.5;
     }
-    doc.text(`From: ${section.sDate} to ${section.eDate}`,12,height)
-    height+=9;
-  })
+  });
+  height += 2;
+}
+
+function createProjects(doc, projectsData) {
+  if (projectsData.length === 0) return;
+  sectionHeading(doc, "Projects", height);
+  height += 7;
+
+  projectsData.forEach((section) => {
+    doc.setFont("CMUSerif", "bold");
+    doc.setFontSize(11);
+    doc.text(section.name, MARGIN_X, height);
+    const nameWidth = doc.getTextWidth(section.name + " ");
+
+    if (section.technologies) {
+      doc.setFont("CMUSerif", "italic");
+      doc.setFontSize(9.5);
+      doc.text(`| ${section.technologies}`, MARGIN_X + nameWidth, height);
+    }
+
+    doc.setFont("CMUSerif", "normal");
+    doc.setFontSize(11);
+    doc.text(`${formatDateUS(section.sDate)} \u2013 ${formatDateUS(section.eDate)}`, PAGE_RIGHT, height, { align: "right" });
+    height += 5.5;
+
+    if (section.descrip) {
+      doc.setFont("CMUSerif", "normal");
+      doc.setFontSize(9.5);
+      const bulletX = MARGIN_X + 4;
+      doc.text("\u2022", MARGIN_X + 1, height);
+      const lines = doc.splitTextToSize(section.descrip, PAGE_RIGHT - bulletX);
+      doc.text(lines, bulletX, height);
+      height += lines.length * 4.3 + 2;
+    } else {
+      height += 1.5;
+    }
+  });
+  height += 2;
+}
+
+function createSkills(doc, skillsData) {
+  const rows = [
+    ["Languages", skillsData.languages],
+    ["Frameworks", skillsData.frameworks],
+    ["Developer Tools", skillsData.developerTools],
+    ["Libraries", skillsData.libraries],
+  ].filter(([, value]) => value);
+
+  if (rows.length === 0) return;
+  sectionHeading(doc, "Technical Skills", height);
+  height += 7;
+
+  rows.forEach(([label, value]) => {
+    doc.setFont("CMUSerif", "bold");
+    doc.setFontSize(9.5);
+    doc.text(`${label}: `, MARGIN_X, height);
+    const labelWidth = doc.getTextWidth(`${label}: `);
+    doc.setFont("CMUSerif", "normal");
+    doc.text(value, MARGIN_X + labelWidth, height);
+    height += 5;
+  });
 }
