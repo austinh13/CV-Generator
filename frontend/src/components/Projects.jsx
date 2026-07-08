@@ -49,7 +49,7 @@ export default function Projects({ addProject }) {
                 <textarea
                     id="proj-descrip"
                     placeholder="Built a full-stack app that..."
-                    maxLength={150}
+                    maxLength={400}
                     rows={3}
                     value={form.descrip}
                     onChange={(e) => handleChange("descrip", e.target.value)}
